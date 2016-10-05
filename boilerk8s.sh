@@ -27,11 +27,35 @@ spec:
 EOM
 }
 
+ingress () {
+  cat <<EOM
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: my-ingress
+spec:
+  rules:
+  # Virtual host to match
+  - host: foo.bar.com
+    http:
+      paths:
+      # Backend to target
+      - backend:
+          serviceName: s1
+          servicePort: 80
+        # Optional path within the virtualhost
+        #path: /foo
+EOM
+
+}
+
 SUB=$1
 shift
 case $SUB
 in
   "svc" | "service") 
     service $*;;
+  "in" | "ing" | "ingress") 
+    ingress $*;;
 esac
 
